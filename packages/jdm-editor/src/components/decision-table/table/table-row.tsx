@@ -14,7 +14,8 @@ export const TableRow: React.FC<{
   disabled?: boolean;
   virtualItem: VirtualItem;
   onResize?: (node: HTMLElement) => void;
-}> = ({ row, disabled, virtualItem, onResize }) => {
+  viewMode: 'default' | 'new';
+}> = ({ row, disabled, virtualItem, onResize, viewMode }) => {
   const trRef = useRef<HTMLTableRowElement>(null);
   const tableActions = useDecisionTableActions();
   const { cursor, isActive } = useDecisionTableState(({ cursor, activeRules }) => ({

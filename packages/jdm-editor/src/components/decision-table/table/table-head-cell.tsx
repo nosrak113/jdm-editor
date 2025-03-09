@@ -318,3 +318,21 @@ export const TableHeadCellOutputField: React.FC<TableHeadCellFieldProps> = ({ co
     </div>
   );
 };
+
+export const TableHeadCellToggleViewMode: React.FC = () => {
+  const { viewMode, setViewMode } = useDecisionTableState((state) => ({
+    viewMode: state.viewMode,
+    setViewMode: state.actions.setViewMode,
+  }));
+
+  return (
+    <Button
+      onClick={() => setViewMode(viewMode === 'default' ? 'new' : 'default')}
+      icon={<SwapOutlined />}
+      size={'small'}
+      type={'text'}
+    >
+      Toggle View Mode
+    </Button>
+  );
+};

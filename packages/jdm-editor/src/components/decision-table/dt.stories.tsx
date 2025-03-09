@@ -122,6 +122,7 @@ const meta: Meta<typeof DecisionTable> = {
   /* 👇 The title prop is optional.
    * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
    * to learn how to generate automatic titles
+   * to learn how to generate automatic titles
    */
   title: 'Decision Table',
   component: DecisionTable,
@@ -256,6 +257,41 @@ export const StressTest: Story = {
         }}
       >
         <DecisionTable {...args} value={value} onChange={setValue} tableHeight='100%' />
+      </div>
+    );
+  },
+};
+
+export const ViewModeToggle: Story = {
+  render: (args) => {
+    const [value, setValue] = useState<DecisionTableType>(shippingFeesDefault);
+    const [viewMode, setViewMode] = useState<'default' | 'new'>('default');
+    const manager = useMemo(() => {
+      return createDragDropManager(HTML5Backend);
+    }, []);
+
+    return (
+      <div
+        style={{
+          height: '100%',
+        }}
+      >
+        <button onClick={() => setViewMode(viewMode === 'default' ? 'new' : 'default')}>
+          Toggle View Mode
+        </button>
+        <DecisionTable
+          {...args}
+          value={value}
+          manager={manager}
+          viewMode={viewMode}
+          onChange={(val) => {
+            console.log(val);
+            setValue(val);
+            args?.onChange?.(val);
+          }}
+          inputsSchema={inputSchemaDefault}
+          tableHeight='100%'
+        />
       </div>
     );
   },
