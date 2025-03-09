@@ -20,6 +20,7 @@ export type DecisionTableProps = {
   mountDialogsOnBody?: boolean;
   manager?: DragDropManager;
   inputData?: unknown;
+  viewMode?: 'default' | 'new';
 } & DecisionTableContextProps &
   DecisionTableEmptyType;
 
@@ -28,6 +29,7 @@ export const DecisionTable: React.FC<DecisionTableProps> = ({
   tableHeight,
   mountDialogsOnBody = false,
   manager,
+  viewMode = 'default',
   ...props
 }) => {
   const { token } = theme.useToken();
@@ -63,7 +65,7 @@ export const DecisionTable: React.FC<DecisionTableProps> = ({
           <DecisionTableProvider>
             <DecisionTableDialogProvider getContainer={mountDialogsOnBody ? undefined : getContainer}>
               <DecisionTableCommandBar />
-              <Table id={id} maxHeight={tableHeight} />
+              <Table id={id} maxHeight={tableHeight} viewMode={viewMode} />
               <DecisionTableDialogs />
               <DecisionTableEmpty {...props} />
             </DecisionTableDialogProvider>

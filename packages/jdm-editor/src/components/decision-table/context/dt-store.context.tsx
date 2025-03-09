@@ -141,6 +141,8 @@ export type DecisionTableStoreType = {
 
     inputsSchema?: SchemaSelectProps[];
     outputsSchema?: SchemaSelectProps[];
+
+    viewMode: 'default' | 'new';
   };
 
   actions: {
@@ -156,6 +158,7 @@ export type DecisionTableStoreType = {
     removeColumn: (type: ColumnType, id: string) => void;
     reorderColumns: (type: ColumnType, columns: TableSchemaItem[]) => void;
     updateHitPolicy: (hitPolicy: HitPolicy) => void;
+    setViewMode: (viewMode: 'default' | 'new') => void;
   };
 
   listeners: {
@@ -204,6 +207,8 @@ export const DecisionTableProvider: React.FC<React.PropsWithChildren<DecisionTab
         derivedVariableTypes: {},
         inputVariableType: undefined,
         inputData: undefined,
+
+        viewMode: 'default',
       })),
     [],
   );
@@ -376,6 +381,9 @@ export const DecisionTableProvider: React.FC<React.PropsWithChildren<DecisionTab
 
         stateStore.setState({ decisionTable: updatedDecisionTable });
         listenerStore.getState().onChange?.(updatedDecisionTable);
+      },
+      setViewMode: (viewMode: 'default' | 'new') => {
+        stateStore.setState({ viewMode });
       },
     }),
     [],

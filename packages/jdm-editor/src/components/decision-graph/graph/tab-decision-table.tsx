@@ -1,5 +1,5 @@
 import type { DragDropManager } from 'dnd-core';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { P, match } from 'ts-pattern';
 
 import { useNodeType } from '../../../helpers/node-type';
@@ -50,22 +50,30 @@ export const TabDecisionTable: React.FC<TabDecisionTableProps> = ({ id, manager 
     return newType;
   }, [nodeType, globalType, content?.inputField, content?.executionMode]);
 
+  const [viewMode, setViewMode] = useState<'default' | 'new'>('default');
+
   return (
-    <DecisionTable
-      id={id}
-      tableHeight={'100%'}
-      value={content as any}
-      manager={manager}
-      disabled={disabled}
-      configurable={configurable}
-      inputData={computedType}
-      activeRules={(activeRules || []).filter((id) => !!id)}
-      onChange={(val) => {
-        graphActions.updateNode(id, (draft) => {
-          Object.assign(draft.content, val);
-          return draft;
-        });
-      }}
-    />
+    <div>
+      <button onClick={() => setViewMode(viewMode === 'default' ? 'new' : 'default')}>
+        Toggle View Mode
+      </button>
+      <DecisionTable
+        id={id}
+        tableHeight={'100%'}
+        value={content as any}
+        manager={manager}
+        disabled={disabled}
+        configurable={configurable}
+        inputData={computedType}
+        activeRules={(activeRules || []).filter((id) => !!id)}
+        onChange={(val) => {
+          graphActions.updateNode(id, (draft) => {
+            Object.assign(draft.content, val);
+            return draft;
+          });
+        }}
+        viewMode={viewMode}
+      />
+    </div>
   );
 };

@@ -25,10 +25,11 @@ export const TableDefaultCell = memo<TableDefaultCellProps>(({ context, ...props
   } = context;
 
   const tableActions = useDecisionTableActions();
-  const { disabled, value, diff } = useDecisionTableState(({ decisionTable, disabled }) => ({
+  const { disabled, value, diff, viewMode } = useDecisionTableState(({ decisionTable, disabled, viewMode }) => ({
     value: decisionTable?.rules?.[index]?.[id],
     diff: (decisionTable?.rules?.[index] as any)?._diff?.fields?.[id],
     disabled,
+    viewMode,
   }));
 
   const column = useDecisionTableState(
@@ -64,7 +65,8 @@ export const TableDefaultCell = memo<TableDefaultCellProps>(({ context, ...props
         value: inner,
         diff,
         onChange: commit,
-      }) || <TableInputCell disabled={disabled} column={column} value={inner} onChange={commit} diff={diff} />}
+        viewMode,
+      }) || <TableInputCell disabled={disabled} column={column} value={inner} onChange={commit} diff={diff} viewMode={viewMode} />}
     </div>
   );
 });
@@ -75,6 +77,7 @@ export type TableCellProps = {
   diff?: DiffMetadata;
   onChange: (value: string) => void;
   disabled?: boolean;
+  viewMode: 'default' | 'new';
 };
 
 enum LocalVariableKind {
@@ -82,7 +85,7 @@ enum LocalVariableKind {
   Derived,
 }
 
-const TableInputCell: React.FC<TableCellProps> = ({ column, value, onChange, disabled, diff }) => {
+const TableInputCell: React.FC<TableCellProps> = ({ column, value, onChange, disabled, diff, viewMode }) => {
   const id = useMemo(() => crypto.randomUUID(), []);
   const textareaRef = useRef<HTMLTextAreaElement | HTMLDivElement>(null);
   const raw = useDecisionTableRaw();

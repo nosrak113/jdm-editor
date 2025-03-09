@@ -23,6 +23,7 @@ import { TableRow } from './table-row';
 export type TableProps = {
   id?: string;
   maxHeight: string | number;
+  viewMode: 'default' | 'new';
 };
 
 type ColumnSizing = Record<string, number>;
@@ -43,7 +44,7 @@ const loadColumnSizing = (id?: string) => {
   }
 };
 
-export const Table: React.FC<TableProps> = ({ id, maxHeight }) => {
+export const Table: React.FC<TableProps> = ({ id, maxHeight, viewMode }) => {
   const { token } = theme.useToken();
 
   const tableActions = useDecisionTableActions();
@@ -210,7 +211,7 @@ export const Table: React.FC<TableProps> = ({ id, maxHeight }) => {
             ))}
         </thead>
         <TableContextMenu>
-          <TableBody tableContainerRef={tableContainerRef} table={table} />
+          <TableBody tableContainerRef={tableContainerRef} table={table} viewMode={viewMode} />
         </TableContextMenu>
         <tfoot>
           <tr>
@@ -237,10 +238,11 @@ export const Table: React.FC<TableProps> = ({ id, maxHeight }) => {
 type TableBodyProps = {
   tableContainerRef: React.RefObject<HTMLDivElement>;
   table: ReactTable<any>;
+  viewMode: 'default' | 'new';
 } & Omit<React.HTMLAttributes<HTMLTableSectionElement>, 'children'>;
 
 const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
-  ({ table, tableContainerRef, ...props }, ref) => {
+  ({ table, tableContainerRef, viewMode, ...props }, ref) => {
     const tableActions = useDecisionTableActions();
     const { disabled, cursor } = useDecisionTableState(({ disabled, cursor }) => ({
       disabled,
@@ -295,6 +297,7 @@ const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
               row={row}
               disabled={disabled}
               onResize={(node) => virtualizer.measureElement(node)}
+              viewMode={viewMode}
             />
           );
         })}

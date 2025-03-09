@@ -3,10 +3,13 @@ import { flexRender } from '@tanstack/react-table';
 import clsx from 'clsx';
 import React from 'react';
 import { match } from 'ts-pattern';
+import { TableHeadCellToggleViewMode } from './table-head-cell';
 
 export const TableHeadRow: React.FC<{ headerGroup: HeaderGroup<any> }> = ({ headerGroup }) => (
   <tr key={headerGroup.id}>
-    <th colSpan={1} style={{ width: 72 }} />
+    <th colSpan={1} style={{ width: 72 }}>
+      <TableHeadCellToggleViewMode />
+    </th>
     {headerGroup.headers.map((header) => {
       const context = header.getContext();
       const parent = context.header.column.parent?.id;
